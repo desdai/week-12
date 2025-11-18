@@ -6,39 +6,28 @@ import matplotlib.pyplot as plt
 
 
 def update_board(current_board):
-    # your code here ...
     rows = len(current_board)
     cols = len(current_board[0])
-    updated_board = [[0 for _ in range(cols)] for _ in range(rows)] # Initialize a new empty grid
+
+    updated_board = [[0 for _ in range(cols)] for _ in range(rows)]
 
     for r in range(rows):
         for c in range(cols):
             live_neighbors = 0
-            # Loop through the 8 neighbors of the cell (r, c)
+
             for i in range(-1, 2):
                 for j in range(-1, 2):
-                    if (i == 0 and j == 0): # Skip the cell itself
+                    if i == 0 and j == 0:
                         continue
-                    # Check if the neighbor is within the grid boundaries
-                    if (0 <= r + i < rows and 0 <= c + j < cols):
-                        # Add the neighbor's state to the count
+                    if 0 <= r + i < rows and 0 <= c + j < cols:
                         live_neighbors += current_board[r + i][c + j]
 
-            # Apply the rules to determine the state of the cell in the new grid
-            if current_board[r][c] == 1: # If the cell is alive
-                if live_neighbors < 2 or live_neighbors > 3:
-                    updated_board[r][c] = 0 # Dies by underpopulation or overpopulation
-                else:
-                    updated_board[r][c] = 1 # Lives on
-            else: # If the cell is dead
-                if live_neighbors == 3:
-                    updated_board[r][c] = 1 # Becomes alive by reproduction
-                else:
-                    updated_board[r][c] = 0 # Remains dead
+            if current_board[r][c] == 1:
+                updated_board[r][c] = 1 if 2 <= live_neighbors <= 3 else 0
+            else:
+                updated_board[r][c] = 1 if live_neighbors == 3 else 0
 
-    # updated_board = current_board
-
-    return updated_board
+    return np.array(updated_board)
 
 
 
